@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "WeatherContentController.h"
+#import "TSMessage.h"
+
 
 @interface AppDelegate ()
 
@@ -16,7 +19,13 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = [[WeatherContentController alloc] init];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
+    [TSMessage setDefaultViewController: self.window.rootViewController];
+    
     return YES;
 }
 
