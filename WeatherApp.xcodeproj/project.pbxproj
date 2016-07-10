@@ -13,6 +13,9 @@
 		54243DED1D2EE37B00D52103 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54243DEC1D2EE37B00D52103 /* Assets.xcassets */; };
 		54243DFB1D2EE37B00D52103 /* WeatherAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 54243DFA1D2EE37B00D52103 /* WeatherAppTests.m */; };
 		54243E061D2EE37B00D52103 /* WeatherAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 54243E051D2EE37B00D52103 /* WeatherAppUITests.m */; };
+		544F570B1D32DC3A00ABE53D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 544F570A1D32DC3A00ABE53D /* MBProgressHUD.m */; };
+		544F570F1D32DC7500ABE53D /* BasicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 544F570E1D32DC7500ABE53D /* BasicViewController.m */; };
+		544F57121D32EA2300ABE53D /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 544F57111D32EA2300ABE53D /* Place.m */; };
 		54C6B3301D30FFD2008EE5AA /* WXCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C6B32D1D30FFD2008EE5AA /* WXCondition.m */; };
 		54C6B3311D30FFD3008EE5AA /* WXDailyForecast.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C6B32F1D30FFD2008EE5AA /* WXDailyForecast.m */; };
 		54C6B3371D310001008EE5AA /* WXClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C6B3341D310001008EE5AA /* WXClient.m */; };
@@ -48,7 +51,16 @@
 		54C6B3831D3110B5008EE5AA /* weather-snow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54C6B3691D3110B5008EE5AA /* weather-snow@2x.png */; };
 		54C6B3841D3110B5008EE5AA /* weather-tstorm.png in Resources */ = {isa = PBXBuildFile; fileRef = 54C6B36A1D3110B5008EE5AA /* weather-tstorm.png */; };
 		54C6B3851D3110B5008EE5AA /* weather-tstorm@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54C6B36B1D3110B5008EE5AA /* weather-tstorm@2x.png */; };
-		E769D65361BF0101A8F01642 /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 085775A3F5737CAC97C7406D /* Pods_WeatherApp.framework */; };
+		54E988DD1D32547400C9863B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54E988DC1D32547400C9863B /* Default-568h@2x.png */; };
+		54E988E41D325C8D00C9863B /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E988DE1D325C8C00C9863B /* AFNetworking.framework */; };
+		54E988E51D325C8D00C9863B /* HexColors.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E988DF1D325C8C00C9863B /* HexColors.framework */; };
+		54E988E61D325C8D00C9863B /* LBBlurredImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E988E01D325C8C00C9863B /* LBBlurredImage.framework */; };
+		54E988E71D325C8D00C9863B /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E988E11D325C8C00C9863B /* Mantle.framework */; };
+		54E988E81D325C8D00C9863B /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E988E21D325C8C00C9863B /* ReactiveCocoa.framework */; };
+		54E988E91D325C8D00C9863B /* TSMessages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E988E31D325C8D00C9863B /* TSMessages.framework */; };
+		54E988EC1D326D2000C9863B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54E988EB1D326D2000C9863B /* SWRevealViewController.m */; };
+		54E988F01D32A54000C9863B /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54E988EF1D32A54000C9863B /* MenuViewController.m */; };
+		633125776543007A1409616E /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 814492CDAA744492BBA982A0 /* Pods_WeatherApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +81,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		085775A3F5737CAC97C7406D /* Pods_WeatherApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54243DDD1D2EE37B00D52103 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54243DE11D2EE37B00D52103 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		54243DE31D2EE37B00D52103 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -83,6 +94,12 @@
 		54243E011D2EE37B00D52103 /* WeatherAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		54243E051D2EE37B00D52103 /* WeatherAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherAppUITests.m; sourceTree = "<group>"; };
 		54243E071D2EE37B00D52103 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		544F57091D32DC3A00ABE53D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		544F570A1D32DC3A00ABE53D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		544F570D1D32DC7500ABE53D /* BasicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicViewController.h; sourceTree = "<group>"; };
+		544F570E1D32DC7500ABE53D /* BasicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicViewController.m; sourceTree = "<group>"; };
+		544F57101D32EA2200ABE53D /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
+		544F57111D32EA2300ABE53D /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
 		54C6B32C1D30FFD2008EE5AA /* WXCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXCondition.h; sourceTree = "<group>"; };
 		54C6B32D1D30FFD2008EE5AA /* WXCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXCondition.m; sourceTree = "<group>"; };
 		54C6B32E1D30FFD2008EE5AA /* WXDailyForecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXDailyForecast.h; sourceTree = "<group>"; };
@@ -93,12 +110,6 @@
 		54C6B3361D310001008EE5AA /* WXManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXManager.m; sourceTree = "<group>"; };
 		54C6B3391D31016C008EE5AA /* WeatherContentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherContentController.h; sourceTree = "<group>"; };
 		54C6B33A1D31016C008EE5AA /* WeatherContentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherContentController.m; sourceTree = "<group>"; };
-		54C6B33C1D3107E2008EE5AA /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "Pods/../build/Release-iphoneos/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
-		54C6B33D1D3107E2008EE5AA /* HexColors.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HexColors.framework; path = "Pods/../build/Release-iphoneos/HexColors/HexColors.framework"; sourceTree = "<group>"; };
-		54C6B33E1D3107E2008EE5AA /* LBBlurredImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LBBlurredImage.framework; path = "Pods/../build/Release-iphoneos/LBBlurredImage/LBBlurredImage.framework"; sourceTree = "<group>"; };
-		54C6B33F1D3107E2008EE5AA /* Mantle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mantle.framework; path = "Pods/../build/Release-iphoneos/Mantle/Mantle.framework"; sourceTree = "<group>"; };
-		54C6B3401D3107E2008EE5AA /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = "Pods/../build/Release-iphoneos/ReactiveCocoa/ReactiveCocoa.framework"; sourceTree = "<group>"; };
-		54C6B3411D3107E2008EE5AA /* TSMessages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TSMessages.framework; path = "Pods/../build/Release-iphoneos/TSMessages/TSMessages.framework"; sourceTree = "<group>"; };
 		54C6B3481D310881008EE5AA /* WeatherApp.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = WeatherApp.xcworkspace; sourceTree = "<group>"; };
 		54C6B34A1D310CB6008EE5AA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		54C6B34C1D310CC3008EE5AA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -129,7 +140,19 @@
 		54C6B3691D3110B5008EE5AA /* weather-snow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weather-snow@2x.png"; sourceTree = "<group>"; };
 		54C6B36A1D3110B5008EE5AA /* weather-tstorm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weather-tstorm.png"; sourceTree = "<group>"; };
 		54C6B36B1D3110B5008EE5AA /* weather-tstorm@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weather-tstorm@2x.png"; sourceTree = "<group>"; };
+		54E988DC1D32547400C9863B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		54E988DE1D325C8C00C9863B /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../Library/Developer/Xcode/DerivedData/Build/Products0094/Debug-iphonesimulator/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
+		54E988DF1D325C8C00C9863B /* HexColors.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HexColors.framework; path = "../../../Library/Developer/Xcode/DerivedData/Build/Products0094/Debug-iphonesimulator/HexColors/HexColors.framework"; sourceTree = "<group>"; };
+		54E988E01D325C8C00C9863B /* LBBlurredImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LBBlurredImage.framework; path = "../../../Library/Developer/Xcode/DerivedData/Build/Products0094/Debug-iphonesimulator/LBBlurredImage/LBBlurredImage.framework"; sourceTree = "<group>"; };
+		54E988E11D325C8C00C9863B /* Mantle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mantle.framework; path = "../../../Library/Developer/Xcode/DerivedData/Build/Products0094/Debug-iphonesimulator/Mantle/Mantle.framework"; sourceTree = "<group>"; };
+		54E988E21D325C8C00C9863B /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = "../../../Library/Developer/Xcode/DerivedData/Build/Products0094/Debug-iphonesimulator/ReactiveCocoa/ReactiveCocoa.framework"; sourceTree = "<group>"; };
+		54E988E31D325C8D00C9863B /* TSMessages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TSMessages.framework; path = "../../../Library/Developer/Xcode/DerivedData/Build/Products0094/Debug-iphonesimulator/TSMessages/TSMessages.framework"; sourceTree = "<group>"; };
+		54E988EA1D326D2000C9863B /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		54E988EB1D326D2000C9863B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		54E988EE1D32A54000C9863B /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		54E988EF1D32A54000C9863B /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		615FC9193A3CE6FC3FF3763E /* Pods-WeatherApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherApp/Pods-WeatherApp.debug.xcconfig"; sourceTree = "<group>"; };
+		814492CDAA744492BBA982A0 /* Pods_WeatherApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFBAA1DE10DBC9131233D587 /* Pods-WeatherApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherApp/Pods-WeatherApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,11 +161,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54E988E41D325C8D00C9863B /* AFNetworking.framework in Frameworks */,
+				54E988E51D325C8D00C9863B /* HexColors.framework in Frameworks */,
+				54E988E61D325C8D00C9863B /* LBBlurredImage.framework in Frameworks */,
+				54E988E71D325C8D00C9863B /* Mantle.framework in Frameworks */,
+				54E988E81D325C8D00C9863B /* ReactiveCocoa.framework in Frameworks */,
+				54E988E91D325C8D00C9863B /* TSMessages.framework in Frameworks */,
 				54C6B34F1D310D3B008EE5AA /* Foundation.framework in Frameworks */,
 				54C6B34D1D310CC3008EE5AA /* CoreLocation.framework in Frameworks */,
 				54C6B34B1D310CB6008EE5AA /* UIKit.framework in Frameworks */,
 				54C6B3491D310881008EE5AA /* WeatherApp.xcworkspace in Frameworks */,
-				E769D65361BF0101A8F01642 /* Pods_WeatherApp.framework in Frameworks */,
+				633125776543007A1409616E /* Pods_WeatherApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +204,7 @@
 		54243DD41D2EE37B00D52103 = {
 			isa = PBXGroup;
 			children = (
+				54E988DC1D32547400C9863B /* Default-568h@2x.png */,
 				54243DDF1D2EE37B00D52103 /* WeatherApp */,
 				54243DF91D2EE37B00D52103 /* WeatherAppTests */,
 				54243E041D2EE37B00D52103 /* WeatherAppUITests */,
@@ -197,6 +227,7 @@
 		54243DDF1D2EE37B00D52103 /* WeatherApp */ = {
 			isa = PBXGroup;
 			children = (
+				54E988ED1D32A51A00C9863B /* Library */,
 				54C6B3321D30FFEB008EE5AA /* Services */,
 				54C6B32B1D30FF99008EE5AA /* Controllers */,
 				54C6B32A1D30FF90008EE5AA /* Models */,
@@ -237,6 +268,24 @@
 			path = WeatherAppUITests;
 			sourceTree = "<group>";
 		};
+		544F57081D32DC3A00ABE53D /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				544F57091D32DC3A00ABE53D /* MBProgressHUD.h */,
+				544F570A1D32DC3A00ABE53D /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		544F570C1D32DC4100ABE53D /* SWReveal */ = {
+			isa = PBXGroup;
+			children = (
+				54E988EA1D326D2000C9863B /* SWRevealViewController.h */,
+				54E988EB1D326D2000C9863B /* SWRevealViewController.m */,
+			);
+			name = SWReveal;
+			sourceTree = "<group>";
+		};
 		54C6B32A1D30FF90008EE5AA /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +293,8 @@
 				54C6B32D1D30FFD2008EE5AA /* WXCondition.m */,
 				54C6B32E1D30FFD2008EE5AA /* WXDailyForecast.h */,
 				54C6B32F1D30FFD2008EE5AA /* WXDailyForecast.m */,
+				544F57101D32EA2200ABE53D /* Place.h */,
+				544F57111D32EA2300ABE53D /* Place.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -251,8 +302,12 @@
 		54C6B32B1D30FF99008EE5AA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				544F570D1D32DC7500ABE53D /* BasicViewController.h */,
+				544F570E1D32DC7500ABE53D /* BasicViewController.m */,
 				54C6B3391D31016C008EE5AA /* WeatherContentController.h */,
 				54C6B33A1D31016C008EE5AA /* WeatherContentController.m */,
+				54E988EE1D32A54000C9863B /* MenuViewController.h */,
+				54E988EF1D32A54000C9863B /* MenuViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -309,20 +364,29 @@
 			path = "Weather Icons";
 			sourceTree = "<group>";
 		};
+		54E988ED1D32A51A00C9863B /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				544F570C1D32DC4100ABE53D /* SWReveal */,
+				544F57081D32DC3A00ABE53D /* MBProgressHUD */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
 		9D07F6B0A31119EA4C420A5B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				54E988DE1D325C8C00C9863B /* AFNetworking.framework */,
+				54E988DF1D325C8C00C9863B /* HexColors.framework */,
+				54E988E01D325C8C00C9863B /* LBBlurredImage.framework */,
+				54E988E11D325C8C00C9863B /* Mantle.framework */,
+				54E988E21D325C8C00C9863B /* ReactiveCocoa.framework */,
+				54E988E31D325C8D00C9863B /* TSMessages.framework */,
 				54C6B34E1D310D3B008EE5AA /* Foundation.framework */,
 				54C6B34C1D310CC3008EE5AA /* CoreLocation.framework */,
 				54C6B34A1D310CB6008EE5AA /* UIKit.framework */,
 				54C6B3481D310881008EE5AA /* WeatherApp.xcworkspace */,
-				54C6B33C1D3107E2008EE5AA /* AFNetworking.framework */,
-				54C6B33D1D3107E2008EE5AA /* HexColors.framework */,
-				54C6B33E1D3107E2008EE5AA /* LBBlurredImage.framework */,
-				54C6B33F1D3107E2008EE5AA /* Mantle.framework */,
-				54C6B3401D3107E2008EE5AA /* ReactiveCocoa.framework */,
-				54C6B3411D3107E2008EE5AA /* TSMessages.framework */,
-				085775A3F5737CAC97C7406D /* Pods_WeatherApp.framework */,
+				814492CDAA744492BBA982A0 /* Pods_WeatherApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -439,6 +503,7 @@
 				54C6B3701D3110B5008EE5AA /* weather-clear.png in Resources */,
 				54C6B37F1D3110B5008EE5AA /* weather-scattered@2x.png in Resources */,
 				54C6B37D1D3110B5008EE5AA /* weather-rain@2x.png in Resources */,
+				54E988DD1D32547400C9863B /* Default-568h@2x.png in Resources */,
 				54C6B3731D3110B5008EE5AA /* weather-few-night@2x.png in Resources */,
 				54C6B3761D3110B5008EE5AA /* weather-mist.png in Resources */,
 				54C6B3821D3110B5008EE5AA /* weather-snow.png in Resources */,
@@ -534,11 +599,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				54243DE51D2EE37B00D52103 /* AppDelegate.m in Sources */,
+				54E988F01D32A54000C9863B /* MenuViewController.m in Sources */,
 				54C6B3301D30FFD2008EE5AA /* WXCondition.m in Sources */,
+				544F57121D32EA2300ABE53D /* Place.m in Sources */,
 				54C6B33B1D31016C008EE5AA /* WeatherContentController.m in Sources */,
+				54E988EC1D326D2000C9863B /* SWRevealViewController.m in Sources */,
 				54C6B3381D310001008EE5AA /* WXManager.m in Sources */,
 				54C6B3311D30FFD3008EE5AA /* WXDailyForecast.m in Sources */,
+				544F570B1D32DC3A00ABE53D /* MBProgressHUD.m in Sources */,
 				54243DE21D2EE37B00D52103 /* main.m in Sources */,
+				544F570F1D32DC7500ABE53D /* BasicViewController.m in Sources */,
 				54C6B3371D310001008EE5AA /* WXClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -672,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 615FC9193A3CE6FC3FF3763E /* Pods-WeatherApp.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -685,6 +756,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = WeatherApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.teknuvo.WeatherApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -695,6 +767,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFBAA1DE10DBC9131233D587 /* Pods-WeatherApp.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -708,6 +781,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = WeatherApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.teknuvo.WeatherApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";

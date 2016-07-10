@@ -4,6 +4,7 @@
 #import "WXClient.h"
 #import <TSMessages/TSMessage.h>
 
+
 @interface WXManager ()
 
 @property (nonatomic, strong, readwrite) WXCondition *currentCondition;
@@ -11,7 +12,9 @@
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) BOOL isFirstUpdate;
+@property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) WXClient *client;
+@property (nonatomic, strong) NSMutableDictionary * citiesWeather;
 
 @end
 
@@ -39,13 +42,42 @@
         
         [[[[RACObserve(self, currentLocation)
             ignore:nil]
-           // Flatten and subscribe to all 3 signals when currentLocation updates
+          
            flattenMap:^(CLLocation *newLocation) {
-               return [self updateCurrentConditions];
+               return [self updateMyLocationCurrentConditions];
            }] deliverOn:RACScheduler.mainThreadScheduler]
          subscribeError:^(NSError *error) {
-             [TSMessage showNotificationWithTitle:@"Error" subtitle:@"There was a problem fetching the latest weather." type:TSMessageNotificationTypeError];
+             NSString *message = @"There was a problem fetching the latest weather.";
+             [self.delegate showErrorMessage:message];
+           
          }];
+        
+        [[[[RACObserve(self, name)
+            ignore:nil]
+           
+           flattenMap:^(NSString *name) {
+               return [self getCitiesWithName:name];
+           }] deliverOn:RACScheduler.mainThreadScheduler]
+         subscribeError:^(NSError *error) {
+             NSString *message = @"There was a problem fetching response";
+             [self.delegate showErrorMessage:message];
+             
+         }];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        _citiesWeather= [NSMutableDictionary new];
+
+        
+        NSData *citiesWeatherDictionaryData = [userDefaults objectForKey:@"citiesWeather"];
+        if (citiesWeatherDictionaryData) {
+            NSMutableDictionary *citiesWeatherDictionary = [NSKeyedUnarchiver unarchiveObjectWithData:citiesWeatherDictionaryData];
+            if (citiesWeatherDictionary) {
+                _citiesWeather = citiesWeatherDictionary;
+                
+            }
+        }
+    
     }
     return self;
 }
@@ -54,7 +86,7 @@
     self.isFirstUpdate = YES;
     
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestAlwaysAuthorization];
     }
     [self.locationManager startUpdatingLocation];
 }
@@ -73,15 +105,38 @@
     }
 }
 
-- (RACSignal *)updateCurrentConditions {
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+ 
+    NSString *message = @"There was a problem fetching your location.";
+    [self.delegate showErrorMessage:message];
+}
+
+- (RACSignal *)updateMyLocationCurrentConditions {
     return [[self.client fetchCurrentConditionsForLocation:self.currentLocation.coordinate] doNext:^(WXCondition *condition) {
         self.currentCondition = condition;
     }];
 }
 
+- (RACSignal *)updateCurrentConditionsForCity:(int) woeid {
+    return [[self.client fetchCurrentConditionsForCity:woeid] doNext:^(WXCondition *condition) {
+        self.currentCondition = condition;
+    }];
+}
+
+- (RACSignal *)getCitiesWithName:(NSString *) name {
+    return [[self.client fetchCitiesWithName:name] doNext:^(NSArray *cities) {
+        self.cities = cities;
+    }];
+}
+
+
 - (NSString *)imageName: (int) icon{
   
-    if(icon < 5|| (icon >37 && icon <39) || icon == 45 || icon == 47){
+   if(icon == 0){
+        return @"";
+    }
+    else if(icon < 5|| (icon >37 && icon <39) || icon == 45 || icon == 47){
         return @"weather-tstorm";
     }
     else if((icon > 4 && icon <11) || icon == 35 ){
@@ -111,4 +166,17 @@
    return @"weather-scattered";
 }
 
+- (void)searchForCitiesWithName:(NSString *) name{
+    self.name = name;
+    [self getCitiesWithName:name];
+}
+
+
+-(void)citiesWeather:(NSMutableDictionary *)citiesWeather{
+    
+    _citiesWeather = citiesWeather;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:citiesWeather] forKey:@"citiesWeather"];
+    [defaults synchronize];
+}
 @end

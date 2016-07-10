@@ -11,26 +11,22 @@
 @property (nonatomic, strong) UIImageView *blurredImageView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, assign) CGFloat screenHeight;
-@property (nonatomic, strong) NSDateFormatter *hourlyFormatter;
-@property (nonatomic, strong) NSDateFormatter *dailyFormatter;
+
 
 @end
 
 @implementation WeatherContentController
 
 - (id)init {
-    if (self = [super init]) {
-        _hourlyFormatter = [[NSDateFormatter alloc] init];
-        _hourlyFormatter.dateFormat = @"h a";
-        
-        _dailyFormatter = [[NSDateFormatter alloc] init];
-        _dailyFormatter.dateFormat = @"EEEE";
-    }
+    self = [super init];
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+
+       [WXManager sharedManager].delegate = self;
     
 	self.screenHeight = [UIScreen mainScreen].bounds.size.height;
     
@@ -63,8 +59,7 @@
     CGRect temperatureFrame = CGRectMake(inset, headerFrame.size.height - temperatureHeight - hiloHeight, headerFrame.size.width - 2*inset, temperatureHeight);
     CGRect iconFrame = CGRectMake(inset, temperatureFrame.origin.y - iconHeight, iconHeight, iconHeight);
     CGRect conditionsFrame = iconFrame;
-    // make the conditions text a little smaller than the view
-    // and to the right of our icon
+
     conditionsFrame.size.width = self.view.bounds.size.width - 2*inset - iconHeight - 10;
     conditionsFrame.origin.x = iconFrame.origin.x + iconHeight + 10;
     
@@ -109,15 +104,43 @@
     iconView.backgroundColor = [UIColor clearColor];
     [header addSubview:iconView];
     
+    UIButton * menuButton = [[UIButton alloc] init];
+    [menuButton setImage:[UIImage imageNamed:@"menu"] forState:UIControlStateNormal];
+    menuButton.frame = CGRectMake(10, 20, 25, 25);
+    [header addSubview:menuButton];
+    
+    SWRevealViewController *revealViewController = self.revealViewController;
+    if ( revealViewController )
+    {
+          [menuButton addTarget:self.revealViewController action:@selector( revealToggle: ) forControlEvents:UIControlEventTouchUpInside];
+        ;
+        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    }
+    
+    UIButton * plusButton = [[UIButton alloc] init];
+    [plusButton setImage:[UIImage imageNamed:@"Plus"] forState:UIControlStateNormal];
+    plusButton.frame = CGRectMake(self.view.frame.size.width - 35, 20, 25, 25);
+    [plusButton addTarget:self action:@selector(openSearch) forControlEvents:UIControlEventTouchUpInside];
+    [header addSubview:plusButton];
+    
+    [[RACObserve([WXManager sharedManager], cities)
+      deliverOn:RACScheduler.mainThreadScheduler]
+     subscribeNext:^(NSArray *cities) {
+         NSLog(@"USAO");
+     }];
+ 
+    
     [[RACObserve([WXManager sharedManager], currentCondition)
       deliverOn:RACScheduler.mainThreadScheduler]
      subscribeNext:^(WXCondition *newCondition) {
+         [self hideProgressAndMessage];
          temperatureLabel.text = [NSString stringWithFormat:@"%.0f°",newCondition.temperature.floatValue];
          conditionsLabel.text = [newCondition.condition capitalizedString];
          cityLabel.text = [newCondition.locationName capitalizedString];
          
          iconView.image = [UIImage imageNamed:[[WXManager sharedManager] imageName:newCondition.icon.intValue]];
      }];
+    
     
     RAC(hiloLabel, text) = [[[RACSignal combineLatest:@[
                                                        RACObserve([WXManager sharedManager], currentCondition.forecast)]
@@ -131,7 +154,7 @@
     }];
 
     
-    [[WXManager sharedManager] findCurrentLocation];
+  
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -148,6 +171,10 @@
     self.tableView.frame = bounds;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //initData
+}
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -217,5 +244,38 @@
     CGFloat percent = MIN(position / height, 1.0);
     self.blurredImageView.alpha = percent;
 }
+#pragma mark - WXMenager Delegate
 
+-(void) showErrorMessage:(NSString *)message{
+    [self hideProgressAndMessage];
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+
+
+}
+
+
+#pragma mark - Private methods
+
+-(void)setShowCurrentLocationWeather:(BOOL)showCurrentLocationWeather{
+    _showCurrentLocationWeather = showCurrentLocationWeather;
+    if(showCurrentLocationWeather){
+        [[WXManager sharedManager] findCurrentLocation];
+        [self showProgressWithInfoMessage:@"Loading"];
+    }
+}
+
+-(void)openSearch{
+    [[WXManager sharedManager] searchForCitiesWithName:@"Beo"];
+    NSLog(@"click");
+    
+}
 @end
