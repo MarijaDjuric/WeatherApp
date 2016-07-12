@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "WXManager.h"
 #import "Place.h"
-
+#import "BasicViewController.h"
 @protocol SearchViewControllerDelegate <NSObject>
 
 -(void)chosePlace:(Place *)place;
 
 @end
 
-@interface SearchTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,WXManagerDelegate>
+@interface SearchTableViewController : BasicViewController<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,WXManagerDelegate>
 
 @property (strong, nonatomic) id<SearchViewControllerDelegate> delegate;
 @end

@@ -11,22 +11,24 @@
 @property (nonatomic, strong) UIImageView *blurredImageView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, assign) CGFloat screenHeight;
-
+@property (nonatomic, strong) NSDateFormatter *hourlyFormatter;
+@property (nonatomic, strong) NSDateFormatter *dailyFormatter;
 
 @end
 
 @implementation WeatherContentController
 
-- (id)init {
-    self = [super init];
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
 
-       [WXManager sharedManager].delegate = self;
+    [WXManager sharedManager].delegate = self;
+    _hourlyFormatter = [[NSDateFormatter alloc] init];
+    _hourlyFormatter.dateFormat = @"h a";
+    
+    _dailyFormatter = [[NSDateFormatter alloc] init];
+    _dailyFormatter.dateFormat = @"EEEE";
     
 	self.screenHeight = [UIScreen mainScreen].bounds.size.height;
     
@@ -125,6 +127,7 @@
     
  
     
+    
     [[RACObserve([WXManager sharedManager], currentCondition)
       deliverOn:RACScheduler.mainThreadScheduler]
      subscribeNext:^(WXCondition *newCondition) {
@@ -133,21 +136,31 @@
          conditionsLabel.text = [newCondition.condition capitalizedString];
          cityLabel.text = [newCondition.locationName capitalizedString];
          
-         iconView.image = [UIImage imageNamed:[[WXManager sharedManager] imageName:newCondition.icon.intValue]];
+         iconView.image = [UIImage imageNamed:[newCondition imageName]];
      }];
     
-    
-    RAC(hiloLabel, text) = [[[RACSignal combineLatest:@[
-                                                       RACObserve([WXManager sharedManager], currentCondition.forecast)]
-                                              reduce:^(NSArray *forecast) {
-                                                  return [NSString  stringWithFormat:@"%.0f° / %.0f°",((WXDailyForecast *)[forecast firstObject]).tempHigh.floatValue,((WXDailyForecast *)[forecast firstObject]).tempLow.floatValue];
-                                                 
+    RAC(hiloLabel, text) = [[RACSignal combineLatest:@[
+                                                       RACObserve([WXManager sharedManager], currentCondition.tempHigh),
+                                                       RACObserve([WXManager sharedManager], currentCondition.tempLow)]
+                                              reduce:^(NSNumber *hi, NSNumber *low) {
+                                                  return [NSString  stringWithFormat:@"%.0f° / %.0f°",hi.floatValue,low.floatValue];
                                               }]
-                            deliverOn:RACScheduler.mainThreadScheduler]
-    doNext:^(id x) {
-         [self.tableView reloadData];
-    }];
+                            deliverOn:RACScheduler.mainThreadScheduler];
+    
+    [[RACObserve([WXManager sharedManager], hourlyForecast)
+      deliverOn:RACScheduler.mainThreadScheduler]
+     subscribeNext:^(NSArray *newForecast) {
+         [self hideProgressAndMessage];
 
+         [self.tableView reloadData];
+     }];
+    
+    [[RACObserve([WXManager sharedManager], dailyForecast)
+      deliverOn:RACScheduler.mainThreadScheduler]
+     subscribeNext:^(NSArray *newForecast) {
+         [self hideProgressAndMessage];
+         [self.tableView reloadData];
+     }];
     
   
 }
@@ -173,11 +186,14 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return MIN([[WXManager sharedManager].currentCondition.forecast count],6) + 1;
+   	if (section == 0) {
+        return MIN([[WXManager sharedManager].hourlyForecast count], 6) + 1;
+    }
+    return MIN([[WXManager sharedManager].dailyForecast count], 6) + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -195,10 +211,19 @@
     
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
+            [self configureHeaderCell:cell title:@"Hourly Forecast"];
+        }
+        else {
+            WXCondition *weather = [WXManager sharedManager].hourlyForecast[indexPath.row - 1];
+            [self configureHourlyCell:cell weather:weather];
+        }
+    }
+    else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
             [self configureHeaderCell:cell title:@"Daily Forecast"];
         }
         else {
-            WXDailyForecast *weather = [WXManager sharedManager].currentCondition.forecast[indexPath.row - 1];
+            WXCondition *weather = [WXManager sharedManager].dailyForecast[indexPath.row - 1];
             [self configureDailyCell:cell weather:weather];
         }
     }
@@ -215,12 +240,21 @@
 
 
 
-- (void)configureDailyCell:(UITableViewCell *)cell weather:(WXDailyForecast *)weather {
+- (void)configureHourlyCell:(UITableViewCell *)cell weather:(WXCondition *)weather {
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
-    cell.textLabel.text = weather.date;
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ h", [self.hourlyFormatter stringFromDate:weather.date]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f°",weather.temperature.floatValue];
+    cell.imageView.image = [UIImage imageNamed:[weather imageName]];
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+}
+
+- (void)configureDailyCell:(UITableViewCell *)cell weather:(WXCondition *)weather {
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+    cell.textLabel.text = [self.dailyFormatter stringFromDate:weather.date];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f° / %.0f°",weather.tempHigh.floatValue,weather.tempLow.floatValue];
-    cell.imageView.image = [UIImage imageNamed:[[WXManager sharedManager] imageName:weather.icon.intValue]];
+    cell.imageView.image = [UIImage imageNamed:[weather imageName]];
     cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
 }
 
@@ -279,7 +313,7 @@
 
 -(void)chosePlace:(Place *)place{
      [self showProgressWithInfoMessage:@"Loading"];
-    [[WXManager sharedManager] getWeatherForPlaceWithWoeid:place.woeid.intValue];
+     [[WXManager sharedManager] getWeatherForPlace:place];
     
     
 }

@@ -10,12 +10,14 @@
 
 @property (nonatomic, strong, readwrite) WXCondition *currentCondition;
 @property (nonatomic, strong, readwrite) CLLocation *currentLocation;
+@property (nonatomic, strong, readwrite) NSArray *hourlyForecast;
+@property (nonatomic, strong, readwrite) NSArray *dailyForecast;
+@property (nonatomic, strong, readwrite) Place* place;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) BOOL isFirstUpdate;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) WXClient *client;
-@property (nonatomic, strong) NSMutableDictionary * citiesWeather;
 
 @end
 
@@ -40,17 +42,39 @@
             [_locationManager requestWhenInUseAuthorization];
         }
         _client = [[WXClient alloc] init];
+        self.placesWeather = [[NSMutableDictionary alloc]init];
         
         [[[[RACObserve(self, currentLocation)
             ignore:nil]
           
            flattenMap:^(CLLocation *newLocation) {
-               return [self updateMyLocationCurrentConditions];
+               return [RACSignal merge:@[
+                                         [self updateMyLocationCurrentConditions],
+                                         [self updateDailyForecast],
+                                         [self updateHourlyForecast]
+                                         ]];
            }] deliverOn:RACScheduler.mainThreadScheduler]
          subscribeError:^(NSError *error) {
              NSString *message = @"There was a problem fetching the latest weather.";
              [self.delegate showErrorMessage:message];
            
+         }];
+        
+        
+        [[[[RACObserve(self, place)
+            ignore:nil]
+           
+           flattenMap:^(Place* place) {
+               return [RACSignal merge:@[
+                                         [self updateCurrentConditionsForPlace:place],
+                                         [self updateDailyForecastForPlace:place],
+                                         [self updateHourlyForecastForPlace:place]
+                                         ]];
+           }] deliverOn:RACScheduler.mainThreadScheduler]
+         subscribeError:^(NSError *error) {
+             NSString *message = @"There was a problem fetching the latest weather.";
+             [self.delegate showErrorMessage:message];
+             
          }];
         
         [[[[RACObserve(self, name)
@@ -65,31 +89,11 @@
              
          }];
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        _citiesWeather= [NSMutableDictionary new];
-
-        
-        NSData *citiesWeatherDictionaryData = [userDefaults objectForKey:@"citiesWeather"];
-        if (citiesWeatherDictionaryData) {
-            NSMutableDictionary *citiesWeatherDictionary = [NSKeyedUnarchiver unarchiveObjectWithData:citiesWeatherDictionaryData];
-            if (citiesWeatherDictionary) {
-                _citiesWeather = citiesWeatherDictionary;
-                
-            }
-        }
     
     }
     return self;
 }
 
--(void)citiesWeather:(NSMutableDictionary *)citiesWeather{
-    
-    _citiesWeather = citiesWeather;
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:citiesWeather] forKey:@"citiesWeather"];
-    [defaults synchronize];
-}
 
 #pragma mark Locaton manager
 
@@ -115,17 +119,7 @@
 }
 
 #pragma mark Private methods
-- (RACSignal *)updateMyLocationCurrentConditions {
-    return [[self.client fetchCurrentConditionsForLocation:self.currentLocation.coordinate] doNext:^(WXCondition *condition) {
-        self.currentCondition = condition;
-    }];
-}
 
-- (RACSignal *)updateCurrentConditionsForPlace:(int) woeid {
-    return [[self.client fetchCurrentConditionsForCity:woeid] doNext:^(WXCondition *condition) {
-        self.currentCondition = condition;
-    }];
-}
 
 - (RACSignal *)getCitiesWithName:(NSString *) name {
     return [[self.client fetchCitiesWithName:name] doNext:^(Places *results) {
@@ -133,51 +127,60 @@
     }];
 }
 
+// Get weather for my location with lat/long
+
+- (RACSignal *)updateMyLocationCurrentConditions {
+    return [[self.client fetchCurrentConditionsForLocation:self.currentLocation.coordinate] doNext:^(WXCondition *condition) {
+        self.currentCondition = condition;
+    }];
+}
+
+
+- (RACSignal *)updateHourlyForecast {
+    return [[self.client fetchHourlyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray *conditions) {
+        self.hourlyForecast = conditions;
+    }];
+}
+
+- (RACSignal *)updateDailyForecast {
+    return [[self.client fetchDailyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray *conditions) {
+        self.dailyForecast = conditions;
+    }];
+}
+
+// Get weather for certain place
+
+- (RACSignal *)updateCurrentConditionsForPlace:(Place *) place {
+    return [[self.client fetchCurrentConditionsForPlace:place] doNext:^(WXCondition *condition) {
+        self.currentCondition = condition;
+    }];
+}
+
+- (RACSignal *)updateHourlyForecastForPlace:(Place *)place {
+    return [[self.client fetchHourlyForecastForPlace:place] doNext:^(NSArray *conditions) {
+        self.hourlyForecast = conditions;
+    }];
+}
+
+- (RACSignal *)updateDailyForecastForPlace:(Place *)place {
+    return [[self.client fetchDailyForecastForPlace:place] doNext:^(NSArray *conditions) {
+        self.dailyForecast = conditions;
+    }];
+}
+
 #pragma mark Publich methods
 
-- (NSString *)imageName: (int) icon{
-  
-   if(icon == 0){
-        return @"";
-    }
-    else if(icon < 5|| (icon >37 && icon <39) || icon == 45 || icon == 47){
-        return @"weather-tstorm";
-    }
-    else if((icon > 4 && icon <11) || icon == 35 ){
-        return @"weather-rain";
-    }
-    else if(icon > 18 && icon < 24){
-       return @"weather-mist";
-    }
-    else if((icon > 10 && icon < 19) && (icon > 40 && icon < 44) && icon == 46){;
-        return @"weather-snow";
-    }
-    else if((icon > 23 && icon < 29) && icon == 44){
-        return @"weather-broken";
-    }
-    else if(icon == 29){
-        return @"weather-few-night";
-    }
-    else if(icon == 30){
-        return @"weather-few";
-    }
-    else if(icon == 32 || icon == 34 || icon ==36){
-        return @"weather-clear";
-    }
-    else if(icon == 31|| icon == 33){
-        return @"weather-moon";
-    }
-   return @"weather-scattered";
-}
-
-
 - (void)searchForCitiesWithName:(NSString *) name{
+    //Observer will call methods for fetching data
     self.name = name;
-    [self getCitiesWithName:name];
 }
 
--(void) getWeatherForPlaceWithWoeid:(int)woeid{
-    [self updateCurrentConditionsForPlace:woeid];
+-(void)getWeatherForPlace:(Place *)place{
+
+    //Observer will call methods for fetching data
+    self.place = place;
+    [self.placesWeather setObject:place forKey:place.woeid];
+
 }
 
 - (void)findCurrentLocation {

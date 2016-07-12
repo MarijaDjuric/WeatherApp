@@ -3,17 +3,12 @@
 
 @implementation WXDailyForecast
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey  {
-  return @{
-           @"tempHigh" : @"high",
-           @"tempLow" :@"low",
-           @"text":@"text",
-           @"date":@"date",
-           @"day":@"day",
-           @"icon":@"code"
-           };
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    NSMutableDictionary *paths = [[super JSONKeyPathsByPropertyKey] mutableCopy];
+    paths[@"tempHigh"] = @"temp.max";
+    paths[@"tempLow"] = @"temp.min";
+    return paths;
 }
-
 
 
 

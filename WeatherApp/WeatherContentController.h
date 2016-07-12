@@ -12,4 +12,6 @@
 
 @property (nonatomic) int cityWoeid;
 @property (nonatomic) BOOL showCurrentLocationWeather;
+
+-(void)openSearch;
 @end

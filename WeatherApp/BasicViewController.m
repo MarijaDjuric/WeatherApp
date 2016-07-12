@@ -20,6 +20,8 @@ static MBProgressHUD *mbProgressHud;
 {
     [super viewDidLoad];
 
+    [self setNeedsStatusBarAppearanceUpdate];
+
     [self initializeGui];
 }
 
@@ -32,6 +34,10 @@ static MBProgressHUD *mbProgressHud;
 	}
     
 	self.isProgressViewShown = NO;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) showProgressWithInfoMessage:(NSString *)message

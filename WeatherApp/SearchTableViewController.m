@@ -26,6 +26,8 @@ NSArray *searchResults;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [WXManager sharedManager].delegate = self;
+
      self.activityView = [[UIActivityIndicatorView alloc]
                                              initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
@@ -105,9 +107,10 @@ NSArray *searchResults;
 #pragma mark - Action methods
 
 - (IBAction)backButtonPressed:(id)sender {
-    [self dismissViewControllerAnimated:NO completion:nil];
-     self.cities = nil;
+    [WXManager sharedManager].cities = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 -(void)textFieldDidChange :(UITextField *)theTextField{
     
@@ -132,7 +135,7 @@ NSArray *searchResults;
     [self stopSearchTimer];
     if (self.searchTimer == nil) {
         
-        self.searchTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+        self.searchTimer = [NSTimer scheduledTimerWithTimeInterval:0.7
                                                             target:self
                                                           selector:@selector(searchForCities)
                                                           userInfo:nil
@@ -165,7 +168,8 @@ NSArray *searchResults;
 -(void) showErrorMessage:(NSString *)message{
     
     [self.activityView stopAnimating];
- 
+    [self.tableView reloadData];
+    
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
