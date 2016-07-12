@@ -40,6 +40,7 @@ static MBProgressHUD *mbProgressHud;
 	[appDelegate.window addSubview:mbProgressHud];
 	mbProgressHud.mode = MBProgressHUDModeIndeterminate;
 	mbProgressHud.labelText = @"";
+    mbProgressHud.color = [UIColor colorWithWhite:0.4 alpha:0.8];
 	mbProgressHud.detailsLabelText = message;
 	self.isProgressViewShown = YES;
     

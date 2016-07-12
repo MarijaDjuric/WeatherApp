@@ -24,6 +24,6 @@
 - (void)findCurrentLocation;
 - (void)searchForCitiesWithName:(NSString *) name;
 - (NSString *)imageName:(int) icon;
-
+-(void) getWeatherForPlaceWithWoeid:(int)woeid;
 
 @end

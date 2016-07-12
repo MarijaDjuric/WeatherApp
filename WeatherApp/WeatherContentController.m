@@ -87,7 +87,7 @@
     UILabel *cityLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.view.bounds.size.width, 30)];
     cityLabel.backgroundColor = [UIColor clearColor];
     cityLabel.textColor = [UIColor whiteColor];
-    cityLabel.text = @"Loading...";
+    cityLabel.text = @"";
     cityLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     cityLabel.textAlignment = NSTextAlignmentCenter;
     [header addSubview:cityLabel];
@@ -123,11 +123,6 @@
     [plusButton addTarget:self action:@selector(openSearch) forControlEvents:UIControlEventTouchUpInside];
     [header addSubview:plusButton];
     
-    [[RACObserve([WXManager sharedManager], cities)
-      deliverOn:RACScheduler.mainThreadScheduler]
-     subscribeNext:^(NSArray *cities) {
-         NSLog(@"USAO");
-     }];
  
     
     [[RACObserve([WXManager sharedManager], currentCondition)
@@ -274,8 +269,18 @@
 }
 
 -(void)openSearch{
-    [[WXManager sharedManager] searchForCitiesWithName:@"Beo"];
-    NSLog(@"click");
+     SearchTableViewController *searchController = [self.storyboard instantiateViewControllerWithIdentifier:@"searchTableViewController"];
+    searchController.delegate = self;
+    [self presentViewController:searchController animated:YES completion:nil];
+    
+}
+
+#pragma mark - SearchViewDelegate
+
+-(void)chosePlace:(Place *)place{
+     [self showProgressWithInfoMessage:@"Loading"];
+    [[WXManager sharedManager] getWeatherForPlaceWithWoeid:place.woeid.intValue];
+    
     
 }
 @end

@@ -3,7 +3,7 @@
 #import "WXClient.h"
 #import "WXCondition.h"
 #import "WXDailyForecast.h"
-#import "Place.h"
+#import "Places.h"
 
 #define YQLQUERY_PREFIX @"http://query.yahooapis.com/v1/public/yql?q="
 #define YQLQUERY_SUFFIX @"&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
@@ -91,15 +91,15 @@
 
 - (RACSignal *)fetchCitiesWithName:(NSString *) name {
     
-    NSString * statement = [NSString stringWithFormat:@"http://where.yahooapis.com/v1/places.q('%@');count=0;?appid=%@&format=json",name,YAHOO_APP_ID];
+    NSString * statement = [NSString stringWithFormat:@"http://where.yahooapis.com/v1/places.q('%@');count=20;?appid=%@&format=json",name,YAHOO_APP_ID];
     
     NSString *urlString = [NSString stringWithFormat:@"%@", [statement stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
     
     NSURL *url = [NSURL URLWithString:urlString];
     
     return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
-        
-        return [NSValueTransformer  mtl_JSONArrayTransformerWithModelClass:[Place class]];
+         NSDictionary *resultJson = json[@"places"];
+        return [MTLJSONAdapter modelOfClass:[Places class] fromJSONDictionary:resultJson error:nil];
     }];
 }
 @end

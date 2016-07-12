@@ -3,6 +3,7 @@
 #import "WXManager.h"
 #import "WXClient.h"
 #import <TSMessages/TSMessage.h>
+#import "Places.h"
 
 
 @interface WXManager ()
@@ -82,14 +83,15 @@
     return self;
 }
 
-- (void)findCurrentLocation {
-    self.isFirstUpdate = YES;
+-(void)citiesWeather:(NSMutableDictionary *)citiesWeather{
     
-    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestAlwaysAuthorization];
-    }
-    [self.locationManager startUpdatingLocation];
+    _citiesWeather = citiesWeather;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:citiesWeather] forKey:@"citiesWeather"];
+    [defaults synchronize];
 }
+
+#pragma mark Locaton manager
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     if (self.isFirstUpdate) {
@@ -112,24 +114,26 @@
     [self.delegate showErrorMessage:message];
 }
 
+#pragma mark Private methods
 - (RACSignal *)updateMyLocationCurrentConditions {
     return [[self.client fetchCurrentConditionsForLocation:self.currentLocation.coordinate] doNext:^(WXCondition *condition) {
         self.currentCondition = condition;
     }];
 }
 
-- (RACSignal *)updateCurrentConditionsForCity:(int) woeid {
+- (RACSignal *)updateCurrentConditionsForPlace:(int) woeid {
     return [[self.client fetchCurrentConditionsForCity:woeid] doNext:^(WXCondition *condition) {
         self.currentCondition = condition;
     }];
 }
 
 - (RACSignal *)getCitiesWithName:(NSString *) name {
-    return [[self.client fetchCitiesWithName:name] doNext:^(NSArray *cities) {
-        self.cities = cities;
+    return [[self.client fetchCitiesWithName:name] doNext:^(Places *results) {
+        self.cities = results.places;
     }];
 }
 
+#pragma mark Publich methods
 
 - (NSString *)imageName: (int) icon{
   
@@ -166,17 +170,24 @@
    return @"weather-scattered";
 }
 
+
 - (void)searchForCitiesWithName:(NSString *) name{
     self.name = name;
     [self getCitiesWithName:name];
 }
 
-
--(void)citiesWeather:(NSMutableDictionary *)citiesWeather{
-    
-    _citiesWeather = citiesWeather;
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:citiesWeather] forKey:@"citiesWeather"];
-    [defaults synchronize];
+-(void) getWeatherForPlaceWithWoeid:(int)woeid{
+    [self updateCurrentConditionsForPlace:woeid];
 }
+
+- (void)findCurrentLocation {
+    self.isFirstUpdate = YES;
+    
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
+    [self.locationManager startUpdatingLocation];
+}
+
+
 @end
