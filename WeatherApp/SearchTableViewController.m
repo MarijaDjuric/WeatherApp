@@ -73,16 +73,17 @@ NSArray *searchResults;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cityTableCell" forIndexPath:indexPath];
-    
-    
+
     if(cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:@"cityTableCell"];
         
     }
-    
-    Place* place = [self.cities objectAtIndex:indexPath.row];
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:0.5];
+    [cell setSelectedBackgroundView:bgColorView];
 
+    Place* place = [self.cities objectAtIndex:indexPath.row];
 
     cell.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
     cell.textLabel.textColor = [UIColor colorWithWhite:1 alpha:1];

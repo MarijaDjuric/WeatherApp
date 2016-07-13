@@ -48,11 +48,15 @@
              @"tempLow": @"main.temp_min",
              @"sunrise": @"sys.sunrise",
              @"sunset": @"sys.sunset",
+             @"country": @"sys.country",
              @"conditionDescription": @"weather.description",
              @"condition": @"weather.main",
              @"icon": @"weather.icon",
              @"windBearing": @"wind.deg",
              @"windSpeed": @"wind.speed",
+             @"woeid":@"id",
+
+             
              };
 }
 

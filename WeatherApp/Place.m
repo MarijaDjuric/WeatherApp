@@ -14,7 +14,9 @@
     return @{
              @"name": @"name",
              @"country": @"country",
-             @"woeid": @"woeid"
+             @"woeid": @"woeid",
+             @"latitude":@"centroid.latitude",
+             @"longitude":@"centroid.longitude",
              };
 }
 @end

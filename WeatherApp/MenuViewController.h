@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "WeatherContentController.h"
 
-@interface MenuViewController : UITableViewController
+@interface MenuViewController : BasicViewController<UITableViewDelegate,UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end

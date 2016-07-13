@@ -13,9 +13,6 @@
 - (RACSignal *)fetchHourlyForecastForLocation:(CLLocationCoordinate2D)coordinate;
 - (RACSignal *)fetchDailyForecastForLocation:(CLLocationCoordinate2D)coordinate;
 
-- (RACSignal *)fetchCurrentConditionsForPlace:(Place *) place;
-- (RACSignal *)fetchDailyForecastForPlace:(Place *) place;
-- (RACSignal *)fetchHourlyForecastForPlace:(Place*) place;
 
 - (RACSignal *)fetchCitiesWithName:(NSString *) name;
 @end

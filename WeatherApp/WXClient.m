@@ -101,48 +101,6 @@
     }];
 }
 
-#pragma mark - Weather for place
-
-- (RACSignal *)fetchCurrentConditionsForPlace:(Place *) place {
-    
-    NSString *urlString = [[NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/weather?q=%@,%@&units=metric&APPID=484cf30fe21a25de91c86ba6c915c71b",place.name, place.country]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
-        return [MTLJSONAdapter modelOfClass:[WXCondition class] fromJSONDictionary:json error:nil];
-    }];
-}
-
-
-- (RACSignal *)fetchDailyForecastForPlace:(Place *) place{
-    NSString *urlString = [[NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast/daily?q=%@,%@&units=metric&cnt=7&APPID=484cf30fe21a25de91c86ba6c915c71b",place.name, place.country]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    // Use the generic fetch method and map results to convert into an array of Mantle objects
-    return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
-        // Build a sequence from the list of raw JSON
-        RACSequence *list = [json[@"list"] rac_sequence];
-        
-        // Use a function to map results from JSON to Mantle objects
-        return [[list map:^(NSDictionary *item) {
-            return [MTLJSONAdapter modelOfClass:[WXDailyForecast class] fromJSONDictionary:item error:nil];
-        }] array];
-    }];
-}
-
-- (RACSignal *)fetchHourlyForecastForPlace:(Place*) place {
-    NSString *urlString = [[NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast?q=%@,%@&units=metric&cnt=12&APPID=484cf30fe21a25de91c86ba6c915c71b",place.name, place.country]stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
-        RACSequence *list = [json[@"list"] rac_sequence];
-        
-        return [[list map:^(NSDictionary *item) {
-            return [MTLJSONAdapter modelOfClass:[WXCondition class] fromJSONDictionary:item error:nil];
-        }] array];
-    }];
-
-}
 #pragma mark - Search cities
     
 - (RACSignal *)fetchCitiesWithName:(NSString *) name {

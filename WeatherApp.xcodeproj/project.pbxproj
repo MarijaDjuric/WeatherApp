@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		540B152B1D359B20000BF4B6 /* LaunchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 540B152A1D359B20000BF4B6 /* LaunchStoryboard.storyboard */; };
 		54243DE21D2EE37B00D52103 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 54243DE11D2EE37B00D52103 /* main.m */; };
 		54243DE51D2EE37B00D52103 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 54243DE41D2EE37B00D52103 /* AppDelegate.m */; };
 		54243DEB1D2EE37B00D52103 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54243DE91D2EE37B00D52103 /* Main.storyboard */; };
@@ -83,6 +84,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		540B152A1D359B20000BF4B6 /* LaunchStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchStoryboard.storyboard; sourceTree = "<group>"; };
 		54243DDD1D2EE37B00D52103 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54243DE11D2EE37B00D52103 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		54243DE31D2EE37B00D52103 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 		54243DD41D2EE37B00D52103 = {
 			isa = PBXGroup;
 			children = (
+				540B152A1D359B20000BF4B6 /* LaunchStoryboard.storyboard */,
 				54E988DC1D32547400C9863B /* Default-568h@2x.png */,
 				54243DDF1D2EE37B00D52103 /* WeatherApp */,
 				54243DF91D2EE37B00D52103 /* WeatherAppTests */,
@@ -523,6 +526,7 @@
 				54C6B3791D3110B5008EE5AA /* weather-moon@2x.png in Resources */,
 				54C6B3771D3110B5008EE5AA /* weather-mist@2x.png in Resources */,
 				54C6B3841D3110B5008EE5AA /* weather-tstorm.png in Resources */,
+				540B152B1D359B20000BF4B6 /* LaunchStoryboard.storyboard in Resources */,
 				54C6B3801D3110B5008EE5AA /* weather-shower.png in Resources */,
 				54C6B3781D3110B5008EE5AA /* weather-moon.png in Resources */,
 				54C6B37B1D3110B5008EE5AA /* weather-rain-night@2x.png in Resources */,
@@ -686,6 +690,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -730,6 +735,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -756,6 +762,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos/AFNetworking",
@@ -781,6 +788,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos/AFNetworking",

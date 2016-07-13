@@ -13,10 +13,10 @@
 @property (nonatomic, strong, readwrite) NSArray *hourlyForecast;
 @property (nonatomic, strong, readwrite) NSArray *dailyForecast;
 @property (nonatomic, strong, readwrite) Place* place;
+@property (nonatomic, strong) NSString* name;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) BOOL isFirstUpdate;
-@property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) WXClient *client;
 
 @end
@@ -44,14 +44,16 @@
         _client = [[WXClient alloc] init];
         self.placesWeather = [[NSMutableDictionary alloc]init];
         
+        //Add observers for properties
+        
         [[[[RACObserve(self, currentLocation)
             ignore:nil]
           
            flattenMap:^(CLLocation *newLocation) {
                return [RACSignal merge:@[
-                                         [self updateMyLocationCurrentConditions],
-                                         [self updateDailyForecast],
-                                         [self updateHourlyForecast]
+                                         [self updateCurrentConditionsForLocation:newLocation.coordinate],
+                                         [self updateDailyForecastForLocation:newLocation.coordinate],
+                                         [self updateHourlyForecastForLocation:newLocation.coordinate]
                                          ]];
            }] deliverOn:RACScheduler.mainThreadScheduler]
          subscribeError:^(NSError *error) {
@@ -60,15 +62,15 @@
            
          }];
         
+    
         
         [[[[RACObserve(self, place)
             ignore:nil]
-           
            flattenMap:^(Place* place) {
                return [RACSignal merge:@[
-                                         [self updateCurrentConditionsForPlace:place],
-                                         [self updateDailyForecastForPlace:place],
-                                         [self updateHourlyForecastForPlace:place]
+                                         [self updateCurrentConditionsForLocation: CLLocationCoordinate2DMake(place.latitude.floatValue, place.longitude.floatValue) ],
+                                         [self updateDailyForecastForLocation:CLLocationCoordinate2DMake(place.latitude.floatValue, place.longitude.floatValue) ],
+                                         [self updateHourlyForecastForLocation:CLLocationCoordinate2DMake(place.latitude.floatValue, place.longitude.floatValue) ]
                                          ]];
            }] deliverOn:RACScheduler.mainThreadScheduler]
          subscribeError:^(NSError *error) {
@@ -88,8 +90,8 @@
              [self.delegate showErrorMessage:message];
              
          }];
+
         
-    
     }
     return self;
 }
@@ -129,44 +131,25 @@
 
 // Get weather for my location with lat/long
 
-- (RACSignal *)updateMyLocationCurrentConditions {
-    return [[self.client fetchCurrentConditionsForLocation:self.currentLocation.coordinate] doNext:^(WXCondition *condition) {
+- (RACSignal *)updateCurrentConditionsForLocation:(CLLocationCoordinate2D )location {
+    return [[self.client fetchCurrentConditionsForLocation:location] doNext:^(WXCondition *condition) {
         self.currentCondition = condition;
     }];
 }
 
 
-- (RACSignal *)updateHourlyForecast {
-    return [[self.client fetchHourlyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray *conditions) {
+- (RACSignal *)updateHourlyForecastForLocation:(CLLocationCoordinate2D ) location {
+    return [[self.client fetchHourlyForecastForLocation:location] doNext:^(NSArray *conditions) {
         self.hourlyForecast = conditions;
     }];
 }
 
-- (RACSignal *)updateDailyForecast {
-    return [[self.client fetchDailyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray *conditions) {
+- (RACSignal *)updateDailyForecastForLocation:(CLLocationCoordinate2D )location {
+    return [[self.client fetchDailyForecastForLocation:location] doNext:^(NSArray *conditions) {
         self.dailyForecast = conditions;
     }];
 }
 
-// Get weather for certain place
-
-- (RACSignal *)updateCurrentConditionsForPlace:(Place *) place {
-    return [[self.client fetchCurrentConditionsForPlace:place] doNext:^(WXCondition *condition) {
-        self.currentCondition = condition;
-    }];
-}
-
-- (RACSignal *)updateHourlyForecastForPlace:(Place *)place {
-    return [[self.client fetchHourlyForecastForPlace:place] doNext:^(NSArray *conditions) {
-        self.hourlyForecast = conditions;
-    }];
-}
-
-- (RACSignal *)updateDailyForecastForPlace:(Place *)place {
-    return [[self.client fetchDailyForecastForPlace:place] doNext:^(NSArray *conditions) {
-        self.dailyForecast = conditions;
-    }];
-}
 
 #pragma mark Publich methods
 
@@ -181,13 +164,14 @@
     self.place = place;
     [self.placesWeather setObject:place forKey:place.woeid];
 
+
 }
 
 - (void)findCurrentLocation {
     self.isFirstUpdate = YES;
     
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestAlwaysAuthorization];
+        [self.locationManager requestWhenInUseAuthorization];
     }
     [self.locationManager startUpdatingLocation];
 }

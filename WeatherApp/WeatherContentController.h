@@ -10,7 +10,7 @@
 
 <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, WXManagerDelegate,SearchViewControllerDelegate>
 
-@property (nonatomic) int cityWoeid;
+@property (nonatomic, strong) Place* place;
 @property (nonatomic) BOOL showCurrentLocationWeather;
 
 -(void)openSearch;

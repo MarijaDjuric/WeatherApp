@@ -19,9 +19,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNeedsStatusBarAppearanceUpdate];
-    // Do any additional setup after loading the view.
+   
 }
-
 -(void)viewWillAppear:(BOOL)animated{
     [self.tableView setFrame:CGRectMake(0,0, 260,self.tableView.frame.size.height)];
     [self.tableView reloadData];
@@ -62,7 +61,6 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
-
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Regular" size:14];
     cell.detailTextLabel.text = nil;
    
@@ -103,6 +101,7 @@
     }
     else if(indexPath.row == 1){
             ((WeatherContentController *)self.revealViewController.frontViewController).showCurrentLocationWeather = YES;
+        ((WeatherContentController *)self.revealViewController.frontViewController).place = nil;
         
     }else{
 

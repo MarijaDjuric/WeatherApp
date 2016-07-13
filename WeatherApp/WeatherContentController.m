@@ -13,7 +13,7 @@
 @property (nonatomic, assign) CGFloat screenHeight;
 @property (nonatomic, strong) NSDateFormatter *hourlyFormatter;
 @property (nonatomic, strong) NSDateFormatter *dailyFormatter;
-
+@property (nonatomic, strong) UIRefreshControl* refreshControl;
 @end
 
 @implementation WeatherContentController
@@ -52,6 +52,9 @@
     self.tableView.pagingEnabled = YES;
     [self.view addSubview:self.tableView];
     
+    
+    
+    //Initialize header view
     CGRect headerFrame = [UIScreen mainScreen].bounds;
     CGFloat inset = 20;
     CGFloat temperatureHeight = 110;
@@ -131,7 +134,11 @@
     [[RACObserve([WXManager sharedManager], currentCondition)
       deliverOn:RACScheduler.mainThreadScheduler]
      subscribeNext:^(WXCondition *newCondition) {
+         
          [self hideProgressAndMessage];
+         if(newCondition){
+             [self reloadData];
+         }
          temperatureLabel.text = [NSString stringWithFormat:@"%.0f°",newCondition.temperature.floatValue];
          conditionsLabel.text = [newCondition.condition capitalizedString];
          cityLabel.text = [newCondition.locationName capitalizedString];
@@ -151,15 +158,19 @@
       deliverOn:RACScheduler.mainThreadScheduler]
      subscribeNext:^(NSArray *newForecast) {
          [self hideProgressAndMessage];
+         if(newForecast){
+             [self reloadData];
+         }
 
-         [self.tableView reloadData];
      }];
     
     [[RACObserve([WXManager sharedManager], dailyForecast)
       deliverOn:RACScheduler.mainThreadScheduler]
      subscribeNext:^(NSArray *newForecast) {
          [self hideProgressAndMessage];
-         [self.tableView reloadData];
+         if(newForecast){
+         [self reloadData];
+         }
      }];
     
   
@@ -277,7 +288,7 @@
 
 -(void) showErrorMessage:(NSString *)message{
     [self hideProgressAndMessage];
-    
+    [self.refreshControl endRefreshing];
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -309,9 +320,51 @@
     
 }
 
+-(void)updateWeatherCondition{
+    
+    if(self.place){
+        [[WXManager sharedManager] getWeatherForPlace:self.place];
+    }else{
+        [[WXManager sharedManager] findCurrentLocation];
+    }
+}
+
+- (void)reloadData
+{
+    // Reload table data
+    [self.tableView reloadData];
+    
+    // End the refreshing
+    if (self.refreshControl) {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm a"];
+        NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                    forKey:NSForegroundColorAttributeName];
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+        self.refreshControl.attributedTitle = attributedTitle;
+        
+        [self.refreshControl endRefreshing];
+    }else{
+        
+        
+        // Initialize the refresh control.
+            self.refreshControl = [[UIRefreshControl alloc] init];
+            self.refreshControl.backgroundColor = [UIColor clearColor];
+            self.refreshControl.tintColor = [UIColor whiteColor];
+            [self.refreshControl addTarget:self
+                                    action:@selector(updateWeatherCondition)
+                          forControlEvents:UIControlEventValueChanged];
+            [self.tableView addSubview:self.refreshControl];
+        
+    }
+}
+
 #pragma mark - SearchViewDelegate
 
 -(void)chosePlace:(Place *)place{
+     self.place = place;
      [self showProgressWithInfoMessage:@"Loading"];
      [[WXManager sharedManager] getWeatherForPlace:place];
     

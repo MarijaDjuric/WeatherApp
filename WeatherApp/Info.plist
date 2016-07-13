@@ -31,6 +31,8 @@
 	<string>We need a location in order to find the weather conditions</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need a location in order to find the weather conditions</string>
+	<key>UILaunchStoryboardName</key>
+	<string>Main</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

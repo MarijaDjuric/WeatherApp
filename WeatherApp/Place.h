@@ -14,5 +14,6 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *country;
 @property (nonatomic) NSNumber *woeid;
-
+@property (nonatomic, strong) NSNumber *latitude;
+@property (nonatomic, strong) NSNumber *longitude;
 @end

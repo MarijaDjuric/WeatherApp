@@ -30,5 +30,6 @@
 - (void)findCurrentLocation;
 - (void)searchForCitiesWithName:(NSString *) name;
 -(void)getWeatherForPlace:(Place *)place;
+-(void)getWeatherForLocation:(CLLocation *)location;
 
 @end
